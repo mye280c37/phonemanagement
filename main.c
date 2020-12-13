@@ -41,7 +41,7 @@ void menu(){
 }
 
 void option(){
-    printf("============================\n");
+    printf("===========option===========\n");
     printf("0. go back\n");
     switch (key) {
         case DISPLAY:
@@ -55,6 +55,10 @@ void option(){
             break;
         case RECOVER:
             printf("1. view all\n");
+            break;
+        case DELETE:
+            printf("3. garbage\n");
+            break;
         case EXIT:
             exit(0);
     }
@@ -189,7 +193,35 @@ void garbage()
 
 void delete_data()
 {
+    int target, i=0;
+    node_pointer tmp = head, preNode = NULL;
     printf("\ndelete_data\n\n");
+    write(head);
+    printf("\n----------------------------------------------------\n");
+    printf("Enter a data number that you want to delete: ");
+    scanf("%d", &target);
+    while(tmp != NULL){
+        if(target == i)
+            break;
+        preNode = tmp;
+        tmp = tmp->next;
+        i++;
+    }
+    // delete from origin list
+    if(preNode != NULL){
+        preNode->next = tmp->next;
+    }
+    else{
+        head = tmp->next;
+    }
+    // add to deleted list
+    node_pointer del_tmp = del_head;
+    while(del_tmp->next != NULL){
+        del_tmp = del_tmp->next;
+    }
+    del_tmp->next = tmp;
+    tmp->next = NULL;
+    printf("\n");
     option();
 }
 

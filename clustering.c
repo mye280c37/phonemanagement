@@ -9,7 +9,7 @@ void L2Distance(ctd_ptr target_node, int *new_ctd){
         int delta_x = x_freq - CENTROID[i]->frequency;
         int delta_y = y_per - CENTROID[i]->period;
         float dist_i = (float)delta_x*delta_x + delta_y*delta_y;
-        dist_i = sqrt(dist_i);
+        dist_i = (float)sqrt(dist_i);
         if(min_dist > dist_i){
             min_dist = dist_i;
             *new_ctd = i;
@@ -89,7 +89,7 @@ void initialize_cluster(){
 
 void update_cluster() {
     ctd_ptr tmp = CENTROID[0], preNode;
-    int new_ctd, cur_ctd = -1, new_x, new_y;
+    int new_ctd, cur_ctd = -1;
 
     while (1) {
         if (tmp->tag == ctd){
@@ -209,6 +209,9 @@ void cluster()
         // delete node form origin list
         if(tmp->u.info[0] != NULL){
             tmp->u.info[0]->next = tmp->u.info[1]->next;
+        }
+        else{
+            head = tmp->u.info[1]->next;
         }
         // add node to del_list
         preNode->next = tmp->u.info[1];
