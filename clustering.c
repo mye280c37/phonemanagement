@@ -183,15 +183,13 @@ void cluster()
             break;
     }
     // print all cluster
-    int min_x = CENTROID[0]->frequency;
-    int MAX_Y = CENTROID[0]->period;
+    //get_cluster();
+    int MAX_Gradient = CENTROID[0]->frequency?CENTROID[0]->period/CENTROID[0]->frequency:MAX_INT;
     int del_cluster = 0;
     for(int c = 1; c<4; c++){
-        int x = CENTROID[c]->frequency;
-        int y = CENTROID[c]->period;
-        if(min_x>x || MAX_Y<y){
-            min_x = x;
-            MAX_Y = y;
+        int gradient = CENTROID[c]->frequency?CENTROID[c]->period/CENTROID[c]->frequency:MAX_INT;
+        if(MAX_Gradient<gradient){
+            MAX_Gradient = gradient;
             del_cluster = c;
         }
     }
@@ -202,7 +200,7 @@ void cluster()
     tmp = tmp->next;
     node_pointer preNode = del_head;
     while(1){
-        if(tmp->tag == ctd || tmp == NULL){
+        if(tmp == NULL || tmp->tag == ctd){
             preNode->next = NULL;
             break;
         }

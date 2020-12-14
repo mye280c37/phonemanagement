@@ -6,9 +6,7 @@ int main() {
     fp = fopen("input_project.txt", "r");
     read(fp);
     fclose(fp);
-
     cluster();
-
     menu();
 
     return 0;
@@ -227,6 +225,56 @@ void delete_data()
 
 void recover()
 {
-    printf("\nrecover\n\n");
+    write(del_head);
+    int i = 0;
+    int n = 0;
+    node_pointer temp4=del_head;
+    int c = 1;
+    while (temp4 != NULL) {
+        temp4 = temp4->next;
+        c++;
+    }
+
+    printf("\n---------------------recover--------------------------\n");
+    printf("Enter a data number that you want to delete: ");
+    scanf("%d", &n);
+    if (n > c) {
+        printf("invalid number.\n");
+        printf("\n----------------------------------------------------\n");
+        printf("Enter a data number that you want to delete: ");
+        scanf("%d", &n);
+    }
+
+    node_pointer temp1;
+    temp1 = NULL;
+
+    node_pointer temp;
+    temp = del_head;
+    for (i = 0; i < n; i++) {
+        temp1 = temp;
+        temp = temp->next;
+    }
+
+    if (temp1 != NULL) {
+        temp1->next = temp->next;
+    }
+    else {
+        del_head = temp->next;
+    }
+
+
+
+    node_pointer temp2;
+    temp2 = head;
+    while (temp2->next != NULL) {
+        temp2 = temp2->next;
+    }
+
+    temp2->next = temp;
+    temp->next = NULL;
+
+
+
+    printf("\n");
     option();
 }
