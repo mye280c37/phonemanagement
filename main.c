@@ -274,7 +274,135 @@ void recover()
     temp->next = NULL;
 
 
-
     printf("\n");
     option();
 }
+
+void searchMenu(){
+    int key;
+    printf("\nFURTHER OPTIONS\n\n");
+    printf("===============================\n");
+    printf("0. Go Back\n");
+    printf("1. Continue Search\n");
+    printf("2. Delete\n");
+    printf("3. Terminate\n");
+    printf("\nSelect an option: ");
+    scanf("%d", &key);
+    while(1){
+        switch (key){
+            case 0:
+                menu();
+                break;
+
+            case 1:
+                printf("Continuing Search...\n");
+                searchOperation(node_pointer );
+                break;
+
+            case 2:
+                deleted();
+                break;
+        
+            case 3:
+                exit(0);
+
+        default:
+            printf("Invalid option. Please try again. \n");
+
+    }
+}
+
+void searchOperation(node_pointer node){
+    int boolean, count = 0;
+    char input;
+    char record[10], month[10], date[10], year[10];
+    node_pointer temp = node;
+
+    printf("Enter name to be searched: ");
+    printf("________\b\b\b\b\b\b\b\b");
+    scanf("%c", &input);
+    do{
+        boolean = doesExist(temp -> name, input);
+        if(boolean == 1){ 
+            
+            /* makes a list of the searched results and each will be outputed in format */    
+            count++;
+            printf("%d. Name: %s\n", count, temp -> name);
+            printf("\tNumber: %s\n", temp -> number);
+            printf("\tEmail: %s\n", temp -> email);
+            printf("\tLast searched: %d\n", temp -> latestdate); 
+            if (latestdate == NULL){
+                print("%d/%d/%d\n", dt.da_month, dt.da_day, dt.da_year); // 
+            }
+
+            /* converting dates to string format */
+            sprintf(month, "%d", dt.da_month);
+            sprintf(date, "%d", dt.da_day);
+            sprintf(year, "%d", dt.da_year);
+            
+            /* storing string formated dates into a node by concatenation */
+            strcpy(temp -> latestdate, month);
+            strcat(temp -> latestdate, date);
+            strcat(temp -> latestdate, year);
+
+        }
+        /* moves to make next comparison */
+        temp = temp -> next;
+    }while(temp != NULL);
+
+    printf("%d results found for %s.\n", count, input);
+    searchMenu();
+}
+
+int doesExist(char x[], char y[]){
+    
+    int i, j;
+    char *p, temp[strlen(y)];
+    if(strlen(x) >= strlen(y)){
+        for(i = 0; i <= (strlen(x) - strlen(y)); i++){
+            p = &x[i];
+            j = 0;
+            while(j != strlen(y)){
+                temp[j] = *(p + j);
+                j++;
+            }
+            temp[j] = '\0';
+            if(strcmp(strupr(temp), strupr(y)) == 0) return 1;
+        }
+    }
+    return 0;
+}
+
+void alphabeticalSort(node_pointer node){
+    node_pointer temp;
+    node_pointer head = node;
+    node_pointer head2 = temp -> next;
+    while(head != NULL){
+        if(strcmp(head -> name, head2 -> name) > 0){
+            temp = temp -> head;
+            head = head -> head2;
+            head2 = head2 -> temp;
+        }
+        else{
+            head = head -> next;
+        }
+    }
+    return head;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
