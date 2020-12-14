@@ -21,6 +21,8 @@
 #define MAX_FLOAT 99999.0
 #define RANGE 100
 
+typedef struct date dt;
+
 typedef struct node_* node_pointer;
 typedef struct node_ {
     char name[20];
