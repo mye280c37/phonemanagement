@@ -330,20 +330,23 @@ void searchOperation(node_pointer node){
             printf("%d. Name: %s\n", count, temp -> name);
             printf("\tNumber: %s\n", temp -> number);
             printf("\tEmail: %s\n", temp -> email);
-            printf("\tLast searched: %d\n", temp -> latestdate); 
-            if (latestdate == NULL){
-                print("%d/%d/%d\n", dt.da_month, dt.da_day, dt.da_year); // 
+            printf("\tLast searched: %s\n", temp -> latestdate); 
+            
+            temp -> frequency++; //updates the number of frequencies searched
+           /* if (latestdate == NULL){
+                print("%d/%d/%d\n", dt.da_month, dt.da_day, dt.da_year); */
             }
 
             /* converting dates to string format */
             sprintf(month, "%d", dt.da_month);
-            sprintf(date, "%d", dt.da_day);
-            sprintf(year, "%d", dt.da_year);
+            sprintf(date, "%d", dt.da_date);
+            sprintf(year, "%d", dt.da_year); 
             
             /* storing string formated dates into a node by concatenation */
-            strcpy(temp -> latestdate, month);
-            strcat(temp -> latestdate, date);
-            strcat(temp -> latestdate, year);
+            strcpy(temp -> latestdate, year);
+            strcat(temp -> latestdate, month);
+            strcat(temp -> latestdate, date); 
+            /* latestdate (string) now stores actual realtime date */
 
         }
         /* moves to make next comparison */
