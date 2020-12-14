@@ -58,7 +58,7 @@ void option(){
             printf("3. garbage\n");
             break;
         case EXIT:
-            exit(0);
+            exit_program();
     }
     printf("4. exit\n");
     printf("============================\n");
@@ -85,8 +85,7 @@ void execute(){
             garbage();
             break;
         case EXIT:
-            printf("exit program\n");
-            exit(0);
+            exit_program();
         case RECOVER:
             recover();
             break;
@@ -177,6 +176,9 @@ void display()
 
 void search()
 {
+    alphabetical_sort();
+    printf("\n");
+    write(head);
     printf("\nsearch\n\n");
     option();
 }
@@ -226,7 +228,7 @@ void delete_data()
 void recover()
 {
     write(del_head);
-    int i = 0;
+    int i;
     int n = 0;
     node_pointer temp4=del_head;
     int c = 1;
@@ -278,86 +280,51 @@ void recover()
     option();
 }
 
-void searchMenu(){
-    int key;
-    printf("\nFURTHER OPTIONS\n\n");
-    printf("===============================\n");
-    printf("0. Go Back\n");
-    printf("1. Continue Search\n");
-    printf("2. Delete\n");
-    printf("3. Terminate\n");
-    printf("\nSelect an option: ");
-    scanf("%d", &key);
-    while(1){
-        switch (key){
-            case 0:
-                menu();
-                break;
+//void searchOperation(node_pointer node){
+//    int boolean, count = 0;
+//    char input;
+//    char record[10], month[10], date[10], year[10];
+//    node_pointer temp = node;
+//
+//    printf("Enter name to be searched: ");
+//    printf("________\b\b\b\b\b\b\b\b");
+//    scanf("%c", &input);
+//    do{
+//        boolean = does_exist(temp -> name, input);
+//        if(boolean == 1){
+//
+//            /* makes a list of the searched results and each will be outputed in format */
+//            count++;
+//            printf("%d. Name: %s\n", count, temp -> name);
+//            printf("\tNumber: %s\n", temp -> number);
+//            printf("\tEmail: %s\n", temp -> email);
+//            printf("\tLast searched: %s\n", temp -> latestdate);
+//
+//            temp -> frequency++; //updates the number of frequencies searched
+//           /* if (latestdate == NULL){
+//                print("%d/%d/%d\n", dt.da_month, dt.da_day, dt.da_year); */
+//            }
+//
+//            /* converting dates to string format */
+//            sprintf(month, "%d", dt.da_month);
+//            sprintf(date, "%d", dt.da_date);
+//            sprintf(year, "%d", dt.da_year);
+//
+//            /* storing string formated dates into a node by concatenation */
+//            strcpy(temp -> latestdate, year);
+//            strcat(temp -> latestdate, month);
+//            strcat(temp -> latestdate, date);
+//            /* latestdate (string) now stores actual realtime date */
+//
+//        }
+//        /* moves to make next comparison */
+//        temp = temp -> next;
+//    }while(temp != NULL);
+//
+//    printf("%d results found for %s.\n", count, input);
+//}
 
-            case 1:
-                printf("Continuing Search...\n");
-                searchOperation(node_pointer );
-                break;
-
-            case 2:
-                deleted();
-                break;
-        
-            case 3:
-                exit(0);
-
-        default:
-            printf("Invalid option. Please try again. \n");
-
-    }
-}
-
-void searchOperation(node_pointer node){
-    int boolean, count = 0;
-    char input;
-    char record[10], month[10], date[10], year[10];
-    node_pointer temp = node;
-
-    printf("Enter name to be searched: ");
-    printf("________\b\b\b\b\b\b\b\b");
-    scanf("%c", &input);
-    do{
-        boolean = doesExist(temp -> name, input);
-        if(boolean == 1){ 
-            
-            /* makes a list of the searched results and each will be outputed in format */    
-            count++;
-            printf("%d. Name: %s\n", count, temp -> name);
-            printf("\tNumber: %s\n", temp -> number);
-            printf("\tEmail: %s\n", temp -> email);
-            printf("\tLast searched: %s\n", temp -> latestdate); 
-            
-            temp -> frequency++; //updates the number of frequencies searched
-           /* if (latestdate == NULL){
-                print("%d/%d/%d\n", dt.da_month, dt.da_day, dt.da_year); */
-            }
-
-            /* converting dates to string format */
-            sprintf(month, "%d", dt.da_month);
-            sprintf(date, "%d", dt.da_date);
-            sprintf(year, "%d", dt.da_year); 
-            
-            /* storing string formated dates into a node by concatenation */
-            strcpy(temp -> latestdate, year);
-            strcat(temp -> latestdate, month);
-            strcat(temp -> latestdate, date); 
-            /* latestdate (string) now stores actual realtime date */
-
-        }
-        /* moves to make next comparison */
-        temp = temp -> next;
-    }while(temp != NULL);
-
-    printf("%d results found for %s.\n", count, input);
-    searchMenu();
-}
-
-int doesExist(char x[], char y[]){
+int does_exist(char x[], char y[]){
     
     int i, j;
     char *p, temp[strlen(y)];
@@ -376,21 +343,64 @@ int doesExist(char x[], char y[]){
     return 0;
 }
 
-void alphabeticalSort(node_pointer node){
-    node_pointer temp;
-    node_pointer head = node;
-    node_pointer head2 = head -> next;
-    while(head != NULL){
-        if(strcmp(head -> name, head2 -> name) > 0){
-            temp = temp -> head;
-            head = head -> head2;
-            head2 = head2 -> temp;
+void alphabetical_sort(){
+    node_pointer preNode = NULL;
+    node_pointer lastNode = NULL;
+//    while(lastNode->next != NULL){
+//        lastNode = lastNode->next;
+//    }
+    node_pointer node1 = head;
+    node_pointer node2 = head -> next;
+    while(lastNode != head){
+        while(node2 != lastNode){
+            if(strcmp(node1 -> name, node2 -> name) > 0){
+                if(preNode != NULL){
+                    preNode->next = node2;
+                    node1->next = node2->next;
+                    node2->next = node1;
+                    // change target
+                    preNode = preNode->next;
+                    node1 = preNode->next;
+                    node2 = node1->next;
+                }
+                else{
+                    head = node2;
+                    node1->next = node2->next;
+                    node2->next = node1;
+                    // change target
+                    preNode = head;
+                    node1 = preNode->next;
+                    node2 = node1->next;
+                }
+            }
+            else{
+                preNode = node1;
+                node1 = preNode->next;
+                node2 = node1->next;
+            }
         }
-        else{
-            head = head -> next;
-        }
+        lastNode = node1;
+        preNode = NULL;
+        node1 = head;
+        node2 = node1->next;
     }
-    return head;
+}
+
+void exit_program(){
+    node_pointer preNode = NULL,tmp = head;
+    while(tmp != NULL){
+        preNode = tmp;
+        tmp=tmp->next;
+        free(preNode);
+    }
+    preNode = NULL; tmp = del_head;
+    while(tmp != NULL){
+        preNode = tmp;
+        tmp=tmp->next;
+        free(preNode);
+    }
+    printf("exit program\n");
+    exit(0);
 }
 
 

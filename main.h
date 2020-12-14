@@ -56,11 +56,10 @@ void alphabetical_sort();
 // SEARCH
 void search();
 // find data using KMP
-void does_exist();
+int does_exist(char*, char*);
 
 // DELETED
 // delete data that user select
-void delete_node();
 /* About MENU 3, linked list about deleted data by clustering or user
    user can recover data in this option */
 void garbage();
@@ -68,4 +67,7 @@ void delete_data();
 
 // RECOVER
 void recover();
+
+// EXIT
+void exit_program();
 #endif

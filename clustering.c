@@ -166,6 +166,10 @@ int get_period(char* latestdate){
 
     per = (tm.tm_mday-target_day) + ((1+tm.tm_mon)-target_month)*31 + ((1900+tm.tm_year)-target_year)*365;
 
+    if(per <0){
+        printf("%d-%d-%d vs %d-%d-%d\n", tm.tm_year+1900, tm.tm_mon+1, tm.tm_mday, target_year, target_month, target_day);
+    }
+
     return per;
 }
 
@@ -183,16 +187,17 @@ void cluster()
             break;
     }
     // print all cluster
-    //get_cluster();
+    get_cluster();
     int MAX_Gradient = CENTROID[0]->frequency?CENTROID[0]->period/CENTROID[0]->frequency:MAX_INT;
     int del_cluster = 0;
-    for(int c = 1; c<4; c++){
-        int gradient = CENTROID[c]->frequency?CENTROID[c]->period/CENTROID[c]->frequency:MAX_INT;
-        if(MAX_Gradient<gradient){
+    for(int c = 1; c<4; c++) {
+        int gradient = CENTROID[c]->frequency ? CENTROID[c]->period / CENTROID[c]->frequency : MAX_INT;
+        if (MAX_Gradient < gradient) {
             MAX_Gradient = gradient;
             del_cluster = c;
         }
     }
+    printf("%d\n", del_cluster);
     ctd_ptr tmp = CENTROID[del_cluster]->next;
     del_head = tmp->u.info[1];
     tmp->u.info[0]->next = tmp->u.info[1]->next;
