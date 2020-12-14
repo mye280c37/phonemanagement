@@ -376,7 +376,7 @@ int doesExist(char x[], char y[]){
 void alphabeticalSort(node_pointer node){
     node_pointer temp;
     node_pointer head = node;
-    node_pointer head2 = temp -> next;
+    node_pointer head2 = head -> next;
     while(head != NULL){
         if(strcmp(head -> name, head2 -> name) > 0){
             temp = temp -> head;
