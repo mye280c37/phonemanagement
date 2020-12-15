@@ -9,7 +9,7 @@ void L2Distance(ctd_ptr target_node, int *new_ctd){
         int delta_x = x_freq - CENTROID[i]->frequency;
         int delta_y = y_per - CENTROID[i]->period;
         float dist_i = (float)delta_x*delta_x + delta_y*delta_y;
-        dist_i = sqrt(dist_i);
+        dist_i = (float)sqrt(dist_i);
         if(min_dist > dist_i){
             min_dist = dist_i;
             *new_ctd = i;
@@ -88,8 +88,8 @@ void initialize_cluster(){
 }
 
 void update_cluster() {
-    ctd_ptr tmp = CENTROID[0], preNode=NULL;
-    int new_ctd, cur_ctd = -1, new_x, new_y;
+    ctd_ptr tmp = CENTROID[0], preNode;
+    int new_ctd, cur_ctd = -1;
 
     while (1) {
         if (tmp->tag == ctd){
@@ -166,6 +166,11 @@ int get_period(char* latestdate){
 
     per = (tm.tm_mday-target_day) + ((1+tm.tm_mon)-target_month)*31 + ((1900+tm.tm_year)-target_year)*365;
 
+    if(per <0){
+        printf("%d-%d-%d vs %d-%d-%d\n", tm.tm_year+1900, tm.tm_mon+1, tm.tm_mday, target_year, target_month, target_day);
+    }
+    
+ 
     return per;
 }
 
@@ -183,18 +188,17 @@ void cluster()
             break;
     }
     // print all cluster
-    int min_x = CENTROID[0]->frequency;
-    int MAX_Y = CENTROID[0]->period;
+    get_cluster();
+    int MAX_Gradient = CENTROID[0]->frequency?CENTROID[0]->period/CENTROID[0]->frequency:MAX_INT;
     int del_cluster = 0;
-    for(int c = 1; c<4; c++){
-        int x = CENTROID[c]->frequency;
-        int y = CENTROID[c]->period;
-        if(min_x>x || MAX_Y<y){
-            min_x = x;
-            MAX_Y = y;
+    for(int c = 1; c<4; c++) {
+        int gradient = CENTROID[c]->frequency ? CENTROID[c]->period / CENTROID[c]->frequency : MAX_INT;
+        if (MAX_Gradient < gradient) {
+            MAX_Gradient = gradient;
             del_cluster = c;
         }
     }
+    printf("\ndeleted cluster: %d\n\n", del_cluster+1);
     ctd_ptr tmp = CENTROID[del_cluster]->next;
     del_head = tmp->u.info[1];
     tmp->u.info[0]->next = tmp->u.info[1]->next;
@@ -202,13 +206,16 @@ void cluster()
     tmp = tmp->next;
     node_pointer preNode = del_head;
     while(1){
-        if(tmp->tag == ctd || tmp == NULL){
+        if(tmp == NULL || tmp->tag == ctd){
             preNode->next = NULL;
             break;
         }
         // delete node form origin list
         if(tmp->u.info[0] != NULL){
             tmp->u.info[0]->next = tmp->u.info[1]->next;
+        }
+        else{
+            head = tmp->u.info[1]->next;
         }
         // add node to del_list
         preNode->next = tmp->u.info[1];
@@ -234,6 +241,7 @@ void get_cluster(){
             printf("%d| %d, %d\n", cnt++, tmp->frequency, tmp->period);
         }
     }
+    //printf("\n");
 }
 
 void clean()

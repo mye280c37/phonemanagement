@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#pragma warning (disable:4996)
 
 #define IS_FULL(ptr) (!(ptr))
 
@@ -21,6 +20,8 @@
 #define MAX_ITERATION 50
 #define MAX_FLOAT 99999.0
 #define RANGE 100
+
+typedef struct date dt;
 
 typedef struct node_* node_pointer;
 typedef struct node_ {
@@ -55,11 +56,10 @@ void alphabetical_sort();
 // SEARCH
 void search();
 // find data using KMP
-void does_exist();
+int does_exist(char*, char*);
 
 // DELETED
 // delete data that user select
-void delete_node();
 /* About MENU 3, linked list about deleted data by clustering or user
    user can recover data in this option */
 void garbage();
@@ -67,4 +67,7 @@ void delete_data();
 
 // RECOVER
 void recover();
+
+// EXIT
+void exit_program();
 #endif

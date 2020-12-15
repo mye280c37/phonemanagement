@@ -5,6 +5,7 @@
 
 #define MAX_ITERATION 50
 #define MAX_FLOAT 99999.0
+#define MAX_INT 999999
 #define RANGE 100
 
 int is_change;
