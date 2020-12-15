@@ -198,7 +198,8 @@ void cluster()
             del_cluster = c;
         }
     }
-    printf("\ndeleted cluster: %d\n\n", del_cluster+1);
+    int a = del_cluster;
+    printf("\ndeleted cluster: %d\n\n", a+1);
     ctd_ptr tmp = CENTROID[del_cluster]->next;
     del_head = tmp->u.info[1];
     tmp->u.info[0]->next = tmp->u.info[1]->next;
