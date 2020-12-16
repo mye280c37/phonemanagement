@@ -332,8 +332,13 @@ void searchOperation(){
         /* moves to make next comparison */
         temp = temp -> next;
     }while(temp != NULL);
-
-    printf("%d results found for %s.\n", count, input);
+    
+    if (count == 0){
+        printf("\nNo results found for %s.\n", count, input);
+    }
+    else {
+        printf("%d results found for %s.\n", count, input);
+    }
 }
 
 int does_exist(char x[], char y[]){
