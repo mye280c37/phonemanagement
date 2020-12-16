@@ -31,7 +31,7 @@ void menu(){
     }
 
     if (try >= 3){
-        printf("eixt program\n");
+        printf("ext program\n");
         exit(1);
     }
 
@@ -334,7 +334,7 @@ void searchOperation(){
     }while(temp != NULL);
     
     if (count == 0){
-        printf("\nNo results found for %s.\n", count, input);
+        printf("\nNo results found for %s.\n", input);
     }
     else {
         printf("%d results found for %s.\n", count, input);
