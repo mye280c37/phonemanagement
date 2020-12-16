@@ -229,21 +229,6 @@ void cluster()
     clean();
 }
 
-void get_cluster(){
-    int cnt;
-    int ctd_index = 0;
-    for(ctd_ptr tmp = CENTROID[0]; tmp != NULL; tmp=tmp->next){
-        if (tmp->tag == ctd){
-            cnt = 0;
-            printf("\n\n<CLUSTER 0%d>\n", ctd_index++);
-            printf("x: %d, y: %d, total: %d(tag: %d)\n\n", tmp->frequency, tmp->period, tmp->u.total, tmp->tag);
-        }
-        else{
-            printf("%d| %d, %d\n", cnt++, tmp->frequency, tmp->period);
-        }
-    }
-}
-
 void clean()
 {
     ctd_ptr tmp = CENTROID[0], postNode;

@@ -420,20 +420,3 @@ void exit_program(){
     printf("exit program\n");
     exit(0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

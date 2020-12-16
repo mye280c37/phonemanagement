@@ -34,6 +34,4 @@ void cluster();
 void update_centroid();
 void update_cluster();
 void clean();
-//
-void get_cluster();
 
