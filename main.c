@@ -168,6 +168,7 @@ void write(node_pointer node) {
 
 void display()
 {
+    alphabetical_sort();
     printf("\n[all]\n");
     write(head);
     printf("\n");
@@ -176,9 +177,6 @@ void display()
 
 void search()
 {
-    alphabetical_sort();
-    printf("\n");
-    write(head);
     searchOperation();
     printf("\n");
     option();
@@ -239,7 +237,7 @@ void recover()
     }
 
     printf("\n---------------------recover--------------------------\n");
-    printf("Enter a data number that you want to delete: ");
+    printf("Enter a data number that you want to recover: ");
     scanf("%d", &n);
     if (n > c) {
         printf("invalid number.\n");
@@ -247,6 +245,20 @@ void recover()
         printf("Enter a data number that you want to delete: ");
         scanf("%d", &n);
     }
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    int target_year, target_month, target_day;
+    target_year = tm.tm_year + 1900;
+    target_month = tm.tm_mon + 1;
+    target_day = tm.tm_mday;
+    char str0[30];
+    char str1[20];
+    char str2[20];
+    sprintf(str0, "%d", target_year);
+    sprintf(str1, "%d", target_month);
+    sprintf(str2, "%d", target_day);
+    strcat(str0, str1);
+    strcat(str0, str2);
 
     node_pointer temp1;
     temp1 = NULL;
@@ -274,11 +286,25 @@ void recover()
     }
 
     temp2->next = temp;
+    strcpy(temp->latestdate, str0);
     temp->next = NULL;
-
 
     printf("\n");
     option();
+}
+
+void writefile(FILE* fw) {
+    node_pointer temp;
+    temp = head;
+    while (temp != NULL) {
+        fprintf(fw, "%s %s %s %s %d\n", temp->name, temp->number, temp->email, temp->latestdate, temp->frequency);
+        temp = temp->next;
+    }
+    temp = del_head;
+    while (temp != NULL) {
+        fprintf(fw, "%s %s %s %s %d\n", temp->name, temp->number, temp->email, temp->latestdate, temp->frequency);
+        temp = temp->next;
+    }
 }
 
 void searchOperation(){
@@ -373,6 +399,12 @@ void alphabetical_sort(){
 }
 
 void exit_program(){
+
+    FILE* fw;
+    fw = fopen("input_project.txt", "w");
+    writefile(fw);
+    fclose(fw);
+
     node_pointer preNode = NULL,tmp = head;
     while(tmp != NULL){
         preNode = tmp;

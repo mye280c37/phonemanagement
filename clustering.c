@@ -191,8 +191,6 @@ void cluster()
         if(!is_change)
             break;
     }
-    // print all cluster
-    get_cluster();
     int MAX_Gradient = CENTROID[0]->frequency?CENTROID[0]->period/CENTROID[0]->frequency: CENTROID[0]->period;
     int del_cluster = 0;
     for(int c = 1; c<CTD_NUM; c++) {
@@ -202,7 +200,6 @@ void cluster()
             del_cluster = c;
         }
     }
-    printf("%d\n", del_cluster);
     ctd_ptr tmp = CENTROID[del_cluster]->next;
     del_head = tmp->u.info[1];
     tmp->u.info[0]->next = tmp->u.info[1]->next;

@@ -70,5 +70,6 @@ void delete_data();
 void recover();
 
 // EXIT
+void writefile(FILE*);
 void exit_program();
 #endif
