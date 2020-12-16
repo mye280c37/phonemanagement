@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 
 #define IS_FULL(ptr) (!(ptr))
 
@@ -21,8 +22,7 @@
 #define MAX_FLOAT 99999.0
 #define RANGE 100
 
-typedef struct date dt;
-
+int key;
 typedef struct node_* node_pointer;
 typedef struct node_ {
     char name[20];
@@ -32,10 +32,6 @@ typedef struct node_ {
     int frequency;
     node_pointer next;
 } node;
-
-clock_t start_t, end_t, total_t;
-
-int key;
 
 node_pointer head;
 node_pointer del_head;
@@ -58,6 +54,7 @@ void search();
 void searchOperation();
 // find data using KMP
 int does_exist(char*, char*);
+void to_up(char*);
 
 // DELETED
 // delete data that user select
