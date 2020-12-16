@@ -5,8 +5,8 @@
 
 #define MAX_ITERATION 50
 #define MAX_FLOAT 99999.0
-#define MAX_INT 999999
 #define RANGE 100
+#define CTD_NUM 4
 
 int is_change;
 
@@ -23,7 +23,7 @@ typedef struct centroid_{
 	}u;
 } centroid;
 
-ctd_ptr CENTROID[4];
+ctd_ptr CENTROID[CTD_NUM];
 
 void L2Distance(ctd_ptr, int*);
 void move(ctd_ptr, int);

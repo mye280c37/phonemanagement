@@ -5,7 +5,7 @@ void L2Distance(ctd_ptr target_node, int *new_ctd){
     int x_freq = target_node->frequency;
     int	y_per = target_node->period;
 
-    for(int i=0; i<4; i++){
+    for(int i=0; i<CTD_NUM; i++){
         int delta_x = x_freq - CENTROID[i]->frequency;
         int delta_y = y_per - CENTROID[i]->period;
         float dist_i = (float)delta_x*delta_x + delta_y*delta_y;
@@ -22,7 +22,7 @@ void initialize_centroid(){
 
     srand(time(NULL));
 
-    for(i=0; i<4; i++){
+    for(i=0; i<CTD_NUM; i++){
         CENTROID[i] = (ctd_ptr)malloc(sizeof(centroid));
         CENTROID[i]->frequency = rand()%RANGE;
         CENTROID[i]->period = rand()%RANGE;
@@ -31,14 +31,14 @@ void initialize_centroid(){
         CENTROID[i]->u.total = 0;
     }
 
-    for(i=0; i<3; i++){
+    for(i=0; i<CTD_NUM-1; i++){
         CENTROID[i]->next = CENTROID[i+1];
     }
 }
 
 
 void update_centroid(){
-    for(int i=0; i<4; i++){
+    for(int i=0; i<CTD_NUM; i++){
         int total = CENTROID[i]->u.total;
         if(total != 0){
             int freq, per;
@@ -78,6 +78,10 @@ void initialize_cluster(){
         ctd_tmp->u.info[1] = node_tmp;
         ctd_tmp->frequency = node_tmp->frequency;
         ctd_tmp->period = get_period(node_tmp->latestdate);
+        if (ctd_tmp->period > 60000){
+            printf("%s\n", node_tmp->name);
+            printf("%s\n", node_tmp->latestdate);
+        }
         ctd_tmp->next = NULL;
         L2Distance(ctd_tmp, &new_ctd);
         move(ctd_tmp, new_ctd);
@@ -166,7 +170,8 @@ int get_period(char* latestdate){
 
     per = (tm.tm_mday-target_day) + ((1+tm.tm_mon)-target_month)*31 + ((1900+tm.tm_year)-target_year)*365;
 
-    if(per <0){
+    if(per > 653854){
+        printf("%s\n", latestdate);
         printf("%d-%d-%d vs %d-%d-%d\n", tm.tm_year+1900, tm.tm_mon+1, tm.tm_mday, target_year, target_month, target_day);
     }
 
@@ -188,10 +193,10 @@ void cluster()
     }
     // print all cluster
     get_cluster();
-    int MAX_Gradient = CENTROID[0]->frequency?CENTROID[0]->period/CENTROID[0]->frequency:MAX_INT;
+    int MAX_Gradient = CENTROID[0]->frequency?CENTROID[0]->period/CENTROID[0]->frequency: CENTROID[0]->period;
     int del_cluster = 0;
-    for(int c = 1; c<4; c++) {
-        int gradient = CENTROID[c]->frequency ? CENTROID[c]->period / CENTROID[c]->frequency : MAX_INT;
+    for(int c = 1; c<CTD_NUM; c++) {
+        int gradient = CENTROID[c]->frequency ? CENTROID[c]->period / CENTROID[c]->frequency : CENTROID[c]->period;
         if (MAX_Gradient < gradient) {
             MAX_Gradient = gradient;
             del_cluster = c;
@@ -229,7 +234,7 @@ void cluster()
 
 void get_cluster(){
     int cnt;
-    int ctd_index = 1;
+    int ctd_index = 0;
     for(ctd_ptr tmp = CENTROID[0]; tmp != NULL; tmp=tmp->next){
         if (tmp->tag == ctd){
             cnt = 0;

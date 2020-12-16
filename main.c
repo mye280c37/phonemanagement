@@ -179,7 +179,8 @@ void search()
     alphabetical_sort();
     printf("\n");
     write(head);
-    printf("\nsearch\n\n");
+    searchOperation();
+    printf("\n");
     option();
 }
 
@@ -280,49 +281,52 @@ void recover()
     option();
 }
 
-//void searchOperation(node_pointer node){
-//    int boolean, count = 0;
-//    char input;
-//    char record[10], month[10], date[10], year[10];
-//    node_pointer temp = node;
-//
-//    printf("Enter name to be searched: ");
-//    printf("________\b\b\b\b\b\b\b\b");
-//    scanf("%c", &input);
-//    do{
-//        boolean = does_exist(temp -> name, input);
-//        if(boolean == 1){
-//
-//            /* makes a list of the searched results and each will be outputed in format */
-//            count++;
-//            printf("%d. Name: %s\n", count, temp -> name);
-//            printf("\tNumber: %s\n", temp -> number);
-//            printf("\tEmail: %s\n", temp -> email);
-//            printf("\tLast searched: %s\n", temp -> latestdate);
-//
-//            temp -> frequency++; //updates the number of frequencies searched
-//           /* if (latestdate == NULL){
-//                print("%d/%d/%d\n", dt.da_month, dt.da_day, dt.da_year); */
-//            }
-//
-//            /* converting dates to string format */
-//            sprintf(month, "%d", dt.da_month);
-//            sprintf(date, "%d", dt.da_date);
-//            sprintf(year, "%d", dt.da_year);
-//
-//            /* storing string formated dates into a node by concatenation */
-//            strcpy(temp -> latestdate, year);
-//            strcat(temp -> latestdate, month);
-//            strcat(temp -> latestdate, date);
-//            /* latestdate (string) now stores actual realtime date */
-//
-//        }
-//        /* moves to make next comparison */
-//        temp = temp -> next;
-//    }while(temp != NULL);
-//
-//    printf("%d results found for %s.\n", count, input);
-//}
+void searchOperation(){
+    int boolean, count = 0;
+    char *input;
+    char record[10], month[10], date[10], year[10];
+    node_pointer temp = head;
+
+    printf("Enter name to be searched: ");
+    printf("________\b\b\b\b\b\b\b\b");
+    scanf("%s", input);
+    printf("%s\n", input);
+    do{
+        boolean = does_exist(temp -> name, input);
+        if(boolean == 1){
+
+            /* makes a list of the searched results and each will be outputed in format */
+            count++;
+            printf("%d. Name: %s\n", count, temp -> name);
+            printf("\tNumber: %s\n", temp -> number);
+            printf("\tEmail: %s\n", temp -> email);
+            printf("\tLast searched: %s\n", temp -> latestdate);
+
+            temp -> frequency++; //updates the number of frequencies searched
+           /* if (latestdate == NULL){
+                print("%d/%d/%d\n", dt.da_month, dt.da_day, dt.da_year);
+            }*/
+
+            /* converting dates to string format */
+            time_t t = time(NULL);
+            struct tm tm = *localtime(&t);
+            sprintf(month, "%d", tm.tm_mon);
+            sprintf(date, "%d", tm.tm_mday);
+            sprintf(year, "%d", tm.tm_year);
+
+            /* storing string formated dates into a node by concatenation */
+            strcpy(temp -> latestdate, year);
+            strcat(temp -> latestdate, month);
+            strcat(temp -> latestdate, date);
+            /* latestdate (string) now stores actual realtime date */
+
+        }
+        /* moves to make next comparison */
+        temp = temp -> next;
+    }while(temp != NULL);
+
+    printf("%d results found for %s.\n", count, input);
+}
 
 int does_exist(char x[], char y[]){
     

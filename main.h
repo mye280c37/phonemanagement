@@ -55,6 +55,7 @@ void alphabetical_sort();
 
 // SEARCH
 void search();
+void searchOperation();
 // find data using KMP
 int does_exist(char*, char*);
 
