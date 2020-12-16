@@ -179,7 +179,8 @@ void search()
     alphabetical_sort();
     printf("\n");
     write(head);
-    printf("\nsearch\n\n");
+    searchOperation();
+    printf("\n");
     option();
 }
 
@@ -238,14 +239,28 @@ void recover()
     }
 
     printf("\n---------------------recover--------------------------\n");
-    printf("Enter a data number that you want to recover: ");
+    printf("Enter a data number that you want to delete: ");
     scanf("%d", &n);
     if (n > c) {
         printf("invalid number.\n");
         printf("\n----------------------------------------------------\n");
-        printf("Enter a data number that you want to recover: ");
+        printf("Enter a data number that you want to delete: ");
         scanf("%d", &n);
     }
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    int target_year, target_month, target_day;
+    target_year = tm.tm_year + 1900;
+    target_month = tm.tm_mon + 1;
+    target_day = tm.tm_mday;
+    char str0[30];
+    char str1[20];
+    char str2[20];
+    sprintf(str0, "%d", target_year);
+    sprintf(str1, "%d", target_month);
+    sprintf(str2, "%d", target_month);
+    strcat(str0, str1);
+    strcat(str0, str2);
 
     node_pointer temp1;
     temp1 = NULL;
@@ -273,61 +288,54 @@ void recover()
     }
 
     temp2->next = temp;
+    strcpy(temp->latestdate, str0);
     temp->next = NULL;
-
 
     printf("\n");
     option();
 }
 
-//void searchOperation(node_pointer node){
-//    int boolean, count = 0;
-//    char input;
-//    char record[10], month[10], date[10], year[10];
-//    node_pointer temp = node;
-//
-//    printf("Enter name to be searched: ");
-//    printf("________\b\b\b\b\b\b\b\b");
-//    scanf("%c", &input);
-//    do{
-//        boolean = does_exist(temp -> name, input);
-//        if(boolean == 1){
-//
-//            /* makes a list of the searched results and each will be outputed in format */
-//            count++;
-//            printf("%d. Name: %s\n", count, temp -> name);
-//            printf("\tNumber: %s\n", temp -> number);
-//            printf("\tEmail: %s\n", temp -> email);
-//            printf("\tLast searched: %s\n", temp -> latestdate);
-//
-//            temp -> frequency++; //updates the number of frequencies searched
-//           /* if (latestdate == NULL){
-//                print("%d/%d/%d\n", dt.da_month, dt.da_day, dt.da_year); */
-//            }
-//
-//            /* converting dates to string format */
-//            sprintf(month, "%d", dt.da_month);
-//            sprintf(date, "%d", dt.da_date);
-//            sprintf(year, "%d", dt.da_year);
-//
-//            /* storing string formated dates into a node by concatenation */
-//            strcpy(temp -> latestdate, year);
-//            strcat(temp -> latestdate, month);
-//            strcat(temp -> latestdate, date);
-//            /* latestdate (string) now stores actual realtime date */
-//
-//        }
-//        /* moves to make next comparison */
-//        temp = temp -> next;
-//    }while(temp != NULL);
-//
-//    printf("%d results found for %s.\n", count, input);
-//}
 
-/*int does_exist(char x[], char y[]){
+void writefile(FILE* fw) {
+    node_pointer temp;
+    temp = head;
+    while (temp != NULL) {
+        fprintf(fw, "%s %s %s %s %d\n", temp->name, temp->number, temp->email, temp->latestdate, temp->frequency);
+        temp = temp->next;
+    }
+
+void searchOperation(){
+    int boolean, count = 0;
+    char input[20];
+    node_pointer temp = head;
+
+    printf("Enter name to be searched: ");
+    scanf("%s", input);
+    printf("%s\n", input);
+    do{
+        boolean = does_exist(temp -> name, input);
+        if(boolean == 1){
+
+            /* makes a list of the searched results and each will be outputed in format */
+            count++;
+            printf("%d. Name: %s\n", count, temp -> name);
+            printf("\tNumber: %s\n", temp -> number);
+            printf("\tEmail: %s\n", temp -> email);
+            printf("\tLast searched: %s\n", temp -> latestdate);
+
+            temp -> frequency++; //updates the number of frequencies searched
+
+        }
+        /* moves to make next comparison */
+        temp = temp -> next;
+    }while(temp != NULL);
+
+    printf("%d results found for %s.\n", count, input);
+}
+
+int does_exist(char x[], char y[]){
     
     int i, j;
-   
     char *p, temp[strlen(y)];
     if(strlen(x) >= strlen(y)){
         for(i = 0; i <= (strlen(x) - strlen(y)); i++){
@@ -342,7 +350,7 @@ void recover()
         }
     }
     return 0;
-}*/
+}
 
 void alphabetical_sort(){
     node_pointer preNode = NULL;
@@ -388,6 +396,12 @@ void alphabetical_sort(){
 }
 
 void exit_program(){
+
+    FILE* fw;
+    fw = fopen("input_project.txt", "w");
+    writefile(fw);
+    fclose(fw);
+
     node_pointer preNode = NULL,tmp = head;
     while(tmp != NULL){
         preNode = tmp;
